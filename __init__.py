@@ -39,10 +39,17 @@ class BeetsSkill(CommonPlaySkill):
         pass
 
     def CPS_match_query_phrase(self, phrase):
-        pass
+        if ' by ' in phrase:
+            (title, artist) = phrase.split(' by ')
+            query = 'beet list -p title:' + title + ' artist:' + artist + ''
+            process = sp.run(query.split(' '), capture_output=True, timeout=3, encoding='utf-8')
+            output = process.stdout
+            if output:
+                return (phrase, CPSMatchLevel.EXACT, output)
+        return None
 
     def CPS_start(self, phrase, data):
-        pass
+        self.speak(data)
 
 
 def create_skill():
